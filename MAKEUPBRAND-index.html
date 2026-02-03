@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAKEUPBRAND-RESELL - Official System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ปรับพื้นหลังเป็นโทนฟ้าอ่อน-ขาว */
+        body { font-family: 'Kanit', sans-serif; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important; margin: 0; }
+        
+        .tab-content { display: none; height: calc(100vh - 70px); }
+        .tab-content.active { display: flex; }
+        .blur-zone { filter: blur(12px); opacity: 0.3; pointer-events: none; }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .animate-scale { animation: scaleIn 0.2s ease-out; }
+
+        /* เปลี่ยน Gradient หัวข้อเป็น น้ำเงิน-ทอง */
+        .modal-header-theme { background: linear-gradient(90deg, #1e3a8a, #d97706); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
+        
+        .modal-header-red { background: linear-gradient(90deg, #f87171, #ef4444); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
+        .modal-header-green { background: linear-gradient(90deg, #34d399, #10b981); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
+
+        .modal-card { background: white; width: 90%; max-width: 400px; border-radius: 24px; padding: 30px; text-align: center; box-shadow: 0 10px 25px rgba(30, 58, 138, 0.15); position: relative; overflow: hidden; }
+        .close-btn { position: absolute; right: 20px; top: 20px; color: #ccc; font-size: 24px; cursor: pointer; border: none; background: none; z-index: 10; }
+        
+        .btn-green-primary { background-color: #10b981; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 500; cursor: pointer; margin-bottom: 12px; }
+        .btn-green-outline { background-color: white; color: #10b981; border: 2px solid #10b981; padding: 12px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .table-container { max-height: 400px; overflow-y: auto; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { position: sticky; top: 0; background: white; z-index: 10; border-bottom: 2px solid #f3f4f6; }
+        
+        .custom-card { background: white; border-radius: 40px; box-shadow: 0 20px 50px rgba(30, 58, 138, 0.1); overflow: hidden; position: relative; border: 1px solid white; }
+        
+        /* Gradient หลักเปลี่ยนเป็น น้ำเงินเข้ม -> ทองชมพูอ่อนๆ หรือ ทอง */
+        .header-gradient-main { background: linear-gradient(90deg, #1e40af, #b45309); height: 6px; width: 100%; position: absolute; top: 0; left: 0; }
+
+        .select-status { padding: 5px 10px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .select-status.pass { background-color: #ecfdf5; color: #10b981; border-color: #10b981; }
+        .select-status.fail { background-color: #fef2f2; color: #ef4444; border-color: #ef4444; }
+    </style>
+</head>
+<body class="min-h-screen overflow-hidden text-slate-700">
+
+    <nav class="w-full bg-white/70 backdrop-blur-md border-b border-blue-100 p-4 flex justify-between items-center z-50 px-8 h-[70px]">
+        <div class="flex items-center gap-3">
+            <img src="https://img5.pic.in.th/file/secure-sv1/image426d36998597af97.md.png" class="w-9 h-9 rounded-full border-2 border-amber-400">
+            <span class="text-amber-600 font-bold text-xl uppercase tracking-wide">MAKEUPBRAND-RESELL</span>
+        </div>
+        <button onclick="showPop('adminLoginOverlay')" class="bg-blue-900 text-white px-5 py-2 rounded-full text-xs font-semibold hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20">System</button>
+    </nav>
+
+    <main id="user-page" class="tab-content active items-center justify-center p-6">
+        <div class="custom-card p-10 w-full max-w-[440px] text-center animate-scale relative">
+            <div class="header-gradient-main"></div>
+            <div class="mb-8 mt-4">
+                <img src="https://img5.pic.in.th/file/secure-sv1/image426d36998597af97.md.png" class="w-28 h-28 rounded-full mx-auto border-4 border-blue-50 shadow-blue-200 shadow-lg">
+                <h1 class="text-3xl font-bold text-blue-900 mt-6 tracking-tight">รับที่อยู่จัดส่ง</h1>
+                <p class="text-sm text-slate-400 mt-2">ระบุชื่อร้านค้าของคุณเพื่อตรวจสอบร้านค้า <br> และรับข้อมูลที่อยู่จัดส่ง</p> 
+            </div>
+            <div class="text-left mb-8">
+                <label class="block text-[12px] font-bold text-blue-800 mb-2 ml-1 uppercase">Name Shop (ชื่อร้านค้า)</label>
+                <div class="flex items-center bg-blue-50/50 border-2 border-blue-100 rounded-2xl px-4 focus-within:border-amber-400 transition-colors">
+                    <span class="text-xl mr-2">🏪</span>
+                    <input id="shopInput" type="text" placeholder="พิมพ์ชื่อร้านค้าของคุณ" class="w-full bg-transparent py-4 text-sm outline-none text-blue-900 placeholder-blue-300">
+                </div>
+            </div>
+            <button onclick="checkShop()" class="w-full bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white font-bold py-4 rounded-2xl shadow-xl shadow-blue-900/20 text-lg transition-all transform active:scale-95 mb-6 border border-blue-800">
+                เข้าสู่ระบบรับที่อยู่ 🔍
+            </button>
+            <div class="flex items-center justify-center gap-2 text-[11px] text-gray-400">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                🛡️ ระบบตรวจสอบความปลอดภัย 24 ชม.
+            </div>
+        </div>
+    </main>
+
+    <div id="adminLoginOverlay" class="fixed inset-0 bg-blue-900/40 backdrop-blur-md hidden items-center justify-center z-[200] p-6">
+        <div class="modal-card animate-scale">
+            <div class="modal-header-theme"></div>
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-100">🔐</div>
+            <h3 class="text-xl font-bold text-blue-900 mb-1">System password</h3>
+            <p class="text-xs text-amber-500 mb-6 font-bold uppercase">MAKEUPBRAND-RESELL</p>
+            <input id="adminPassInput" type="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-4 mb-4 text-center outline-none focus:border-amber-400 transition-colors">
+            <div class="flex gap-2">
+                <button onclick="hideAll()" class="flex-1 py-3 text-slate-400 font-bold text-sm hover:text-slate-600">Cancel</button>
+                <button onclick="verifyAdmin()" class="flex-1 bg-blue-900 text-white rounded-xl py-3 font-bold text-sm hover:bg-blue-800 shadow-lg">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notFoundOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[110] p-6">
+        <div class="modal-card animate-scale">
+            <div class="modal-header-red"></div>
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold border border-red-100">✕</div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">ไม่พบข้อมูล</h3>
+            <p class="text-sm text-slate-500 leading-relaxed mb-6">ขออภัย ไม่พบข้อมูลร้านค้านี้ในระบบ <br> ลองใหม่อีกครั้ง</p>
+            <button onclick="hideAll()" class="w-full bg-slate-800 text-white font-bold py-3.5 rounded-xl hover:bg-slate-700">ลองใหม่อีกครั้ง</button>
+        </div>
+    </div>
+
+    <div id="failOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-[150] p-6">
+        <div class="modal-card animate-scale">
+            <div class="modal-header-red"></div>
+            <button onclick="hideAll()" class="close-btn">&times;</button>
+            <div class="w-16 h-16 bg-red-50 text-red-400 rounded-full flex justify-center items-center mx-auto mb-4 text-4xl font-bold border border-red-100">!</div>
+            <h2 class="text-xl font-bold text-slate-800 mb-2">กรุณาติดต่อผู้ดูแล</h2>
+            <p class="text-sm text-slate-500">เราตรวจพบว่าบัญชีร้านค้า <span id="fShop" class="font-bold text-blue-600"></span><br><span class="font-bold text-slate-800">"ยังไม่ได้ทำการยืนยันบัญชีร้านค้า"</span><br><span style="color: #b2bec3; font-size: 12px;">กรุณาติดต่อผู้ดูแลเพื่อทำการยืนยันบัญชีร้านค้าก่อน</span></p>
+            <button onclick="hideAll()" class="btn-green-primary mt-6 shadow-green-200 shadow-lg">ปิดหน้าต่าง</button>
+            <button onclick="window.open('https://line.me/ti/p/@619hvjgs')" class="btn-green-outline"><span>💬</span> ติดต่อฝ่ายบริการ</button>
+        </div>
+    </div>
+
+    <div id="passOverlay" class="fixed inset-0 bg-blue-900/30 backdrop-blur-sm hidden items-center justify-center z-[150] p-4">
+        <div class="modal-card animate-scale max-w-md w-full">
+            <div class="modal-header-green"></div>
+            <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl border border-green-100">✓</div>
+            <h2 class="text-2xl font-bold text-blue-900">พบที่อยู่จัดส่งใหม่</h2>
+            <p class="text-xs text-green-600 font-medium mt-1">ระบบดึงข้อมูลยืนยันจาก 𝐌𝐚𝐤𝐞𝐮𝐩𝐛𝐫𝐚𝐧𝐝-𝐑𝐞𝐬𝐞𝐥𝐥 เรียบร้อยแล้ว</p>
+            <div class="text-left bg-blue-50/30 p-6 rounded-[2rem] border border-blue-100 mt-4 relative">
+                <span class="text-amber-500 text-xl absolute right-6 top-6 cursor-pointer hover:text-amber-600" onclick="askUnlock()">👁️</span>
+                <p class="text-sm"><strong>ร้านค้า:</strong> <span id="pShop" class="text-blue-700 font-bold ml-2"></span></p>
+                <p class="text-sm mb-4"><strong>ชื่อผู้รับ:</strong> <span id="pOwner" class="text-blue-700 font-bold ml-2"></span></p>
+                <div id="blurSec" class="blur-zone bg-white p-4 rounded-2xl border border-dashed border-blue-200 shadow-sm">
+                    <p id="pAddr" class="text-sm text-blue-800 font-bold"></p>
+                </div>
+                <button id="unlockBtn" onclick="askUnlock()" class="w-full mt-4 py-2 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-bold hover:bg-blue-200 transition-colors">ใส่รหัสธุรกรรมเพื่อเปิดดูข้อมูล</button>
+            </div>
+            <button onclick="hideAll()" class="w-full bg-[#10b981] text-white font-bold py-4 rounded-2xl mt-6 shadow-lg hover:bg-[#059669]">ตกลง, ทราบแล้ว</button>
+        </div>
+    </div>
+
+    <div id="admin-page" class="tab-content flex-col p-6 max-w-5xl mx-auto w-full overflow-y-auto">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-blue-100 border border-white animate-scale mt-10 relative overflow-hidden">
+            <div class="modal-header-theme"></div>
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-blue-900">⚙️ แผงควบคุมออนไลน์</h2>
+                <div class="flex gap-4">
+                    <button id="bulkDelBtn" onclick="bulkDelete()" class="hidden bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg hover:bg-red-600 transition-all">🗑️ ลบที่เลือก (<span id="selectedCount">0</span>)</button>
+                    <button onclick="switchTab('user-page')" class="text-amber-600 font-bold hover:text-amber-700">กลับหน้าหลัก</button>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50/50 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4 border border-blue-100">
+                <input id="newShop" type="text" placeholder="ชื่อร้าน" class="p-3 rounded-xl border-none outline-none text-sm bg-white shadow-sm text-blue-900">
+                <input id="newOwner" type="text" placeholder="ชื่อผู้รับ" class="p-3 rounded-xl border-none outline-none text-sm bg-white shadow-sm text-blue-900">
+                <input id="newAddr" type="text" placeholder="ที่อยู่จัดส่ง" class="p-3 rounded-xl border-none outline-none text-sm lg:col-span-2 bg-white shadow-sm text-blue-900">
+                <select id="newStatus" class="p-3 rounded-xl border-none outline-none font-bold text-blue-600 text-sm bg-white shadow-sm">
+                    <option value="pass">✅ ผ่าน</option>
+                    <option value="fail">❌ ไม่ผ่าน</option>
+                </select>
+                <button id="addBtn" onclick="addShop()" class="lg:col-span-5 bg-blue-800 text-white font-bold py-3.5 rounded-xl hover:bg-blue-900 transition-all shadow-md">บันทึกข้อมูลออนไลน์ +</button>
+            </div>
+
+            <div class="mb-4">
+                <input id="adminSearchInput" type="text" oninput="render()" placeholder="🔍 ค้นหาร้านค้าหรือชื่อผู้รับในตาราง..." class="w-full p-4 rounded-2xl border-2 border-blue-50 bg-white outline-none focus:border-amber-400 transition-all text-sm shadow-inner text-blue-900">
+            </div>
+
+            <div class="table-container shadow-inner border border-gray-100">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-slate-400 text-sm">
+                            <th class="p-4 w-10"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                            <th class="p-4">ร้านค้า</th>
+                            <th class="p-4">ชื่อผู้รับ</th>
+                            <th class="p-4">สถานะ</th>
+                            <th class="p-4 text-center">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shopTable"></tbody>
+                </table>
+            </div>
+            <div id="loading" class="hidden text-center text-amber-500 mt-4 animate-pulse italic font-bold">กำลังซิงค์ข้อมูลกับ Google Sheets...</div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwIWFeivX_maRHecxZZAZ_RaqStloGMm7ILzueDRykercHB5S9xjdCCDC_ngO-QwfXg/exec";
+        let db = [];
+
+        async function loadData() {
+            const loadingIndicator = document.getElementById('loading');
+            if(loadingIndicator) loadingIndicator.classList.remove('hidden');
+            try {
+                const response = await fetch(SHEET_API_URL);
+                const data = await response.json();
+                if(Array.isArray(data)) {
+                    db = data;
+                    render();
+                    console.log("Data Loaded Successfully");
+                }
+            } catch (e) { 
+                console.error("Load Error:", e); 
+            }
+            if(loadingIndicator) loadingIndicator.classList.add('hidden');
+        }
+
+        function render() {
+            const tbody = document.getElementById('shopTable');
+            const searchVal = document.getElementById('adminSearchInput') ? document.getElementById('adminSearchInput').value.toLowerCase() : "";
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            
+            const filtered = db.filter(s => 
+                (s.name || "").toString().toLowerCase().includes(searchVal) || 
+                (s.owner || "").toString().toLowerCase().includes(searchVal)
+            );
+
+            filtered.forEach((s) => {
+                const statusSelect = `
+                    <select onchange="updateStatus('${s.name}', this.value)" class="select-status ${s.status === 'pass' ? 'pass' : 'fail'}">
+                        <option value="pass" ${s.status === 'pass' ? 'selected' : ''}>✅ ผ่าน</option>
+                        <option value="fail" ${s.status === 'fail' ? 'selected' : ''}>❌ ไม่ผ่าน</option>
+                    </select>
+                `;
+
+                // เปลี่ยนสีชื่อร้านค้าในตารางเป็นสีน้ำเงิน
+                tbody.innerHTML += `<tr class="border-b text-sm hover:bg-slate-50 transition-colors">
+                    <td class="p-4"><input type="checkbox" class="shop-check" value="${s.name}" onchange="updateBulkUI()"></td>
+                    <td class="p-4 font-bold text-blue-700">${s.name}</td>
+                    <td class="p-4 text-slate-600">${s.owner}</td>
+                    <td class="p-4">${statusSelect}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteShop('${s.name}')" class="text-red-400 font-bold p-2 hover:bg-red-50 rounded-lg">🗑️ ลบ</button>
+                    </td>
+                </tr>`;
+            });
+            updateBulkUI();
+        }
+
+        function toggleAll(master) {
+            document.querySelectorAll('.shop-check').forEach(ck => ck.checked = master.checked);
+            updateBulkUI();
+        }
+
+        function updateBulkUI() {
+            const checked = document.querySelectorAll('.shop-check:checked');
+            const btn = document.getElementById('bulkDelBtn');
+            const count = document.getElementById('selectedCount');
+            if(count) count.innerText = checked.length;
+            if(btn) {
+                if(checked.length > 0) btn.classList.remove('hidden');
+                else btn.classList.add('hidden');
+            }
+        }
+
+        async function bulkDelete() {
+            const checked = document.querySelectorAll('.shop-check:checked');
+            const names = Array.from(checked).map(ck => ck.value);
+            if(!confirm(`ยืนยันการลบ ${names.length} รายการที่เลือก?`)) return;
+
+            document.getElementById('loading').classList.remove('hidden');
+            try {
+                db = db.filter(s => !names.includes(s.name));
+                render();
+
+                await fetch(SHEET_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ names: names, action: "bulkDelete" })
+                });
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการลบกลุ่ม");
+                loadData();
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        async function updateStatus(name, newStatus) {
+            const index = db.findIndex(s => s.name === name);
+            if (index === -1) return;
+
+            db[index].status = newStatus;
+            render();
+
+            document.getElementById('loading').classList.remove('hidden');
+            try {
+                await fetch(SHEET_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        name: db[index].name,
+                        owner: db[index].owner,
+                        addr: db[index].addr,
+                        status: newStatus,
+                        action: "add" 
+                    })
+                });
+            } catch (e) {
+                alert("ไม่สามารถอัปเดตสถานะได้");
+                loadData();
+            }
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        async function addShop() {
+            const name = document.getElementById('newShop').value.trim();
+            const owner = document.getElementById('newOwner').value.trim();
+            const addr = document.getElementById('newAddr').value.trim();
+            const status = document.getElementById('newStatus').value;
+            
+            if(!name || !owner) return alert("กรุณากรอกข้อมูลให้ครบ");
+            
+            document.getElementById('addBtn').disabled = true;
+            document.getElementById('loading').classList.remove('hidden');
+
+            try {
+                await fetch(SHEET_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({name, owner, addr, status, action: "add"})
+                });
+                
+                alert("บันทึกสำเร็จ!");
+                document.getElementById('newShop').value = '';
+                document.getElementById('newOwner').value = '';
+                document.getElementById('newAddr').value = '';
+                loadData();
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            } finally {
+                document.getElementById('addBtn').disabled = false;
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        async function deleteShop(name) {
+            if(!confirm(`ยืนยันการลบร้าน "${name}"?`)) return;
+            
+            db = db.filter(s => s.name !== name);
+            render();
+
+            document.getElementById('loading').classList.remove('hidden');
+            try {
+                await fetch(SHEET_API_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify({name: name, action: "delete"}) 
+                });
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการลบ");
+                loadData();
+            }
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function checkShop() {
+            const input = document.getElementById('shopInput').value.trim();
+            
+            if(!input) {
+                alert("กรุณากรอกชื่อร้านค้า");
+                return;
+            }
+
+            if(db.length === 0) {
+                alert("ระบบกำลังโหลดข้อมูลหรือยังไม่มีข้อมูลในระบบ กรุณารอสักครู่...");
+                return;
+            }
+
+            const shop = db.find(s => (s.name || "").toString().trim().toLowerCase() === input.toLowerCase());
+            
+            if(!shop) { 
+                showPop('notFoundOverlay'); 
+                return; 
+            }
+
+            if(shop.status === 'pass') {
+                document.getElementById('pShop').innerText = shop.name;
+                document.getElementById('pOwner').innerText = shop.owner;
+                document.getElementById('pAddr').innerText = shop.addr;
+                
+                const blurSec = document.getElementById('blurSec');
+                const unlockBtn = document.getElementById('unlockBtn');
+                if(blurSec) blurSec.classList.add('blur-zone');
+                if(unlockBtn) unlockBtn.classList.remove('hidden');
+                
+                showPop('passOverlay'); 
+            } else {
+                const failShopLabel = document.getElementById('fShop');
+                if(failShopLabel) failShopLabel.innerText = `"${shop.name}"`;
+                showPop('failOverlay'); 
+            }
+        }
+
+        function verifyAdmin() {
+            const pass = document.getElementById('adminPassInput').value;
+            if(pass === "admin999") {
+                hideAll();
+                switchTab('admin-page');
+                document.getElementById('adminPassInput').value = '';
+            } else { 
+                alert("System password incorrect!"); 
+            }
+        }
+
+        function askUnlock() {
+            const pass = prompt("กรุณากรอกรหัสธุรกรรม เพื่อเปิดดูข้อมูลนี้:");
+            if(pass === "123123123") {
+                const blurSec = document.getElementById('blurSec');
+                const unlockBtn = document.getElementById('unlockBtn');
+                if(blurSec) blurSec.classList.remove('blur-zone');
+                if(unlockBtn) unlockBtn.classList.add('hidden');
+            } else if(pass !== null) {
+                alert("รหัสธุรกรรมไม่ถูกต้อง!");
+            }
+        }
+
+        function switchTab(id) { 
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const targetTab = document.getElementById(id);
+            if(targetTab) targetTab.classList.add('active'); 
+            if(id === 'admin-page') loadData(); 
+        }
+
+        function showPop(id) { 
+            const el = document.getElementById(id);
+            if(el) el.classList.replace('hidden', 'flex'); 
+        }
+
+        function hideAll() { 
+            document.querySelectorAll('.fixed').forEach(el => el.classList.replace('flex', 'hidden')); 
+        }
+        
+        loadData();
+    </script>
+</body>
+</html>
