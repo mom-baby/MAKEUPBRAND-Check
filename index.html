@@ -5,48 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAKEUPBRAND-RESELL - Official System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="https://img5.pic.in.th/file/secure-sv1/imagea31adcc13258dfd0.png">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* 1. พื้นหลังเปลี่ยนสีเอง (ฟ้าอ่อน - เหลืองทอง) */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body { 
-            font-family: 'Kanit', sans-serif; 
-            /* กำหนด Gradient และขยายขนาดเพื่อให้เคลื่อนไหวได้ */
-            background: linear-gradient(-45deg, #eff6ff, #dbeafe, #fad74c, #59abc4) !important;
-            background-size: 400% 400% !important;
-            animation: gradientBG 15s ease infinite;
-            margin: 0; 
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        /* ปรับพื้นหลังเป็นโทนฟ้าอ่อน-ขาว */
+        body { font-family: 'Kanit', sans-serif; background: linear-gradient(-45deg, #eff6ff, #dbeafe, #fad74c59, #fad74c59) !important; margin: 0; }
         
-        /* 2. สไตล์สำหรับอั่งเปาร่วง */
-        .angpao {
-            position: fixed;
-            top: -50px;
-            z-index: 99;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-            }
-        }
-
         .tab-content { display: none; height: calc(100vh - 70px); }
         .tab-content.active { display: flex; }
         .blur-zone { filter: blur(12px); opacity: 0.3; pointer-events: none; }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .animate-scale { animation: scaleIn 0.2s ease-out; }
 
+        /* เปลี่ยน Gradient หัวข้อเป็น น้ำเงิน-ทอง */
         .modal-header-theme { background: linear-gradient(90deg, #1e3a8a, #d97706); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
+        
         .modal-header-red { background: linear-gradient(90deg, #f87171, #ef4444); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
         .modal-header-green { background: linear-gradient(90deg, #34d399, #10b981); height: 8px; width: 100%; position: absolute; top: 0; left: 0; }
 
@@ -61,6 +34,8 @@
         thead th { position: sticky; top: 0; background: white; z-index: 10; border-bottom: 2px solid #f3f4f6; }
         
         .custom-card { background: white; border-radius: 40px; box-shadow: 0 20px 50px rgba(30, 58, 138, 0.1); overflow: hidden; position: relative; border: 1px solid white; }
+        
+        /* Gradient หลักเปลี่ยนเป็น น้ำเงินเข้ม -> ทองชมพูอ่อนๆ หรือ ทอง */
         .header-gradient-main { background: linear-gradient(90deg, #1e40af, #b45309); height: 6px; width: 100%; position: absolute; top: 0; left: 0; }
 
         .select-status { padding: 5px 10px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.2s; }
@@ -68,9 +43,9 @@
         .select-status.fail { background-color: #fef2f2; color: #ef4444; border-color: #ef4444; }
     </style>
 </head>
-<body class="text-slate-700">
+<body class="min-h-screen overflow-hidden text-slate-700">
 
-    <nav class="w-full bg-white/70 backdrop-blur-md border-b border-blue-100 p-4 flex justify-between items-center z-[100] px-8 h-[70px] relative">
+    <nav class="w-full bg-white/70 backdrop-blur-md border-b border-blue-100 p-4 flex justify-between items-center z-50 px-8 h-[70px]">
         <div class="flex items-center gap-3">
             <img src="https://img5.pic.in.th/file/secure-sv1/image426d36998597af97.md.png" class="w-9 h-9 rounded-full border-2 border-amber-400">
             <span class="text-amber-600 font-bold text-xl uppercase tracking-wide">MAKEUPBRAND-RESELL</span>
@@ -79,7 +54,7 @@
     </nav>
 
     <main id="user-page" class="tab-content active items-center justify-center p-6">
-        <div class="custom-card p-10 w-full max-w-[440px] text-center animate-scale relative z-10">
+        <div class="custom-card p-10 w-full max-w-[440px] text-center animate-scale relative">
             <div class="header-gradient-main"></div>
             <div class="mb-8 mt-4">
                 <img src="https://img5.pic.in.th/file/secure-sv1/image426d36998597af97.md.png" class="w-28 h-28 rounded-full mx-auto border-4 border-blue-50 shadow-blue-200 shadow-lg">
@@ -117,7 +92,7 @@
         </div>
     </div>
 
-    <div id="notFoundOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[200] p-6">
+    <div id="notFoundOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[110] p-6">
         <div class="modal-card animate-scale">
             <div class="modal-header-red"></div>
             <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold border border-red-100">✕</div>
@@ -127,7 +102,7 @@
         </div>
     </div>
 
-    <div id="failOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-[200] p-6">
+    <div id="failOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-[150] p-6">
         <div class="modal-card animate-scale">
             <div class="modal-header-red"></div>
             <button onclick="hideAll()" class="close-btn">&times;</button>
@@ -139,7 +114,7 @@
         </div>
     </div>
 
-    <div id="passOverlay" class="fixed inset-0 bg-blue-900/30 backdrop-blur-sm hidden items-center justify-center z-[200] p-4">
+    <div id="passOverlay" class="fixed inset-0 bg-blue-900/30 backdrop-blur-sm hidden items-center justify-center z-[150] p-4">
         <div class="modal-card animate-scale max-w-md w-full">
             <div class="modal-header-green"></div>
             <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl border border-green-100">✓</div>
@@ -158,7 +133,7 @@
         </div>
     </div>
 
-    <div id="admin-page" class="tab-content flex-col p-6 max-w-5xl mx-auto w-full overflow-y-auto relative z-10">
+    <div id="admin-page" class="tab-content flex-col p-6 max-w-5xl mx-auto w-full overflow-y-auto">
         <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-blue-100 border border-white animate-scale mt-10 relative overflow-hidden">
             <div class="modal-header-theme"></div>
             <div class="flex justify-between items-center mb-8">
@@ -203,34 +178,6 @@
     </div>
 
     <script>
-        // --- ระบบอั่งเปาร่วง ---
-        function createAngpao() {
-            const angpao = document.createElement('img');
-            angpao.src = 'https://www.emojiall.com/en/header-svg/%F0%9F%A7%A7.svg';
-            angpao.classList.add('angpao');
-            
-            // สุ่มตำแหน่งแนวนอน (0 - 100vw)
-            angpao.style.left = Math.random() * 100 + 'vw';
-            // สุ่มขนาด (20px - 50px)
-            const size = Math.random() * 65 + 70;
-            angpao.style.width = size + 'px';
-            // สุ่มเวลาที่ใช้ในการร่วง (3s - 7s)
-            angpao.style.animationDuration = Math.random() * 4 + 3 + 's';
-            // สุ่มความโปร่งใส
-            angpao.style.opacity = Math.random() * 0.5 + 0.5;
-
-            document.body.appendChild(angpao);
-
-            // ลบออกเมื่อร่วงจบเพื่อไม่ให้หนักเครื่อง
-            setTimeout(() => {
-                angpao.remove();
-            }, 7000);
-        }
-
-        // สร้างอั่งเปาทุกๆ 500ms
-        setInterval(createAngpao, 500);
-
-        // --- ส่วนของระบบเดิม ---
         const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwIWFeivX_maRHecxZZAZ_RaqStloGMm7ILzueDRykercHB5S9xjdCCDC_ngO-QwfXg/exec";
         let db = [];
 
@@ -243,14 +190,17 @@
                 if(Array.isArray(data)) {
                     db = data;
                     render();
+                    console.log("Data Loaded Successfully");
                 }
-            } catch (e) { console.error("Load Error:", e); }
+            } catch (e) { 
+                console.error("Load Error:", e); 
+            }
             if(loadingIndicator) loadingIndicator.classList.add('hidden');
         }
 
         function render() {
             const tbody = document.getElementById('shopTable');
-            const searchVal = document.getElementById('adminSearchInput')?.value.toLowerCase() || "";
+            const searchVal = document.getElementById('adminSearchInput') ? document.getElementById('adminSearchInput').value.toLowerCase() : "";
             if(!tbody) return;
             tbody.innerHTML = '';
             
@@ -267,6 +217,7 @@
                     </select>
                 `;
 
+                // เปลี่ยนสีชื่อร้านค้าในตารางเป็นสีน้ำเงิน
                 tbody.innerHTML += `<tr class="border-b text-sm hover:bg-slate-50 transition-colors">
                     <td class="p-4"><input type="checkbox" class="shop-check" value="${s.name}" onchange="updateBulkUI()"></td>
                     <td class="p-4 font-bold text-blue-700">${s.name}</td>
@@ -305,6 +256,7 @@
             try {
                 db = db.filter(s => !names.includes(s.name));
                 render();
+
                 await fetch(SHEET_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -321,16 +273,27 @@
         async function updateStatus(name, newStatus) {
             const index = db.findIndex(s => s.name === name);
             if (index === -1) return;
+
             db[index].status = newStatus;
             render();
+
             document.getElementById('loading').classList.remove('hidden');
             try {
                 await fetch(SHEET_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: JSON.stringify({ ...db[index], action: "add" })
+                    body: JSON.stringify({
+                        name: db[index].name,
+                        owner: db[index].owner,
+                        addr: db[index].addr,
+                        status: newStatus,
+                        action: "add" 
+                    })
                 });
-            } catch (e) { loadData(); }
+            } catch (e) {
+                alert("ไม่สามารถอัปเดตสถานะได้");
+                loadData();
+            }
             document.getElementById('loading').classList.add('hidden');
         }
 
@@ -339,22 +302,27 @@
             const owner = document.getElementById('newOwner').value.trim();
             const addr = document.getElementById('newAddr').value.trim();
             const status = document.getElementById('newStatus').value;
+            
             if(!name || !owner) return alert("กรุณากรอกข้อมูลให้ครบ");
+            
             document.getElementById('addBtn').disabled = true;
             document.getElementById('loading').classList.remove('hidden');
+
             try {
                 await fetch(SHEET_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify({name, owner, addr, status, action: "add"})
                 });
+                
                 alert("บันทึกสำเร็จ!");
                 document.getElementById('newShop').value = '';
                 document.getElementById('newOwner').value = '';
                 document.getElementById('newAddr').value = '';
                 loadData();
-            } catch (e) { alert("เกิดข้อผิดพลาดในการบันทึก"); }
-            finally {
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            } finally {
                 document.getElementById('addBtn').disabled = false;
                 document.getElementById('loading').classList.add('hidden');
             }
@@ -362,62 +330,100 @@
 
         async function deleteShop(name) {
             if(!confirm(`ยืนยันการลบร้าน "${name}"?`)) return;
+            
             db = db.filter(s => s.name !== name);
             render();
+
             document.getElementById('loading').classList.remove('hidden');
             try {
                 await fetch(SHEET_API_URL, { 
-                    method: 'POST', mode: 'no-cors', 
+                    method: 'POST', 
+                    mode: 'no-cors', 
                     body: JSON.stringify({name: name, action: "delete"}) 
                 });
-            } catch (e) { loadData(); }
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการลบ");
+                loadData();
+            }
             document.getElementById('loading').classList.add('hidden');
         }
 
         function checkShop() {
             const input = document.getElementById('shopInput').value.trim();
-            if(!input) return alert("กรุณากรอกชื่อร้านค้า");
-            if(db.length === 0) return alert("ระบบกำลังโหลดข้อมูล...");
+            
+            if(!input) {
+                alert("กรุณากรอกชื่อร้านค้า");
+                return;
+            }
+
+            if(db.length === 0) {
+                alert("ระบบกำลังโหลดข้อมูลหรือยังไม่มีข้อมูลในระบบ กรุณารอสักครู่...");
+                return;
+            }
+
             const shop = db.find(s => (s.name || "").toString().trim().toLowerCase() === input.toLowerCase());
-            if(!shop) return showPop('notFoundOverlay');
+            
+            if(!shop) { 
+                showPop('notFoundOverlay'); 
+                return; 
+            }
 
             if(shop.status === 'pass') {
                 document.getElementById('pShop').innerText = shop.name;
                 document.getElementById('pOwner').innerText = shop.owner;
                 document.getElementById('pAddr').innerText = shop.addr;
-                document.getElementById('blurSec').classList.add('blur-zone');
-                document.getElementById('unlockBtn').classList.remove('hidden');
+                
+                const blurSec = document.getElementById('blurSec');
+                const unlockBtn = document.getElementById('unlockBtn');
+                if(blurSec) blurSec.classList.add('blur-zone');
+                if(unlockBtn) unlockBtn.classList.remove('hidden');
+                
                 showPop('passOverlay'); 
             } else {
-                document.getElementById('fShop').innerText = `"${shop.name}"`;
+                const failShopLabel = document.getElementById('fShop');
+                if(failShopLabel) failShopLabel.innerText = `"${shop.name}"`;
                 showPop('failOverlay'); 
             }
         }
 
         function verifyAdmin() {
-            if(document.getElementById('adminPassInput').value === "admin999") {
+            const pass = document.getElementById('adminPassInput').value;
+            if(pass === "admin999") {
                 hideAll();
                 switchTab('admin-page');
                 document.getElementById('adminPassInput').value = '';
-            } else { alert("System password incorrect!"); }
+            } else { 
+                alert("System password incorrect!"); 
+            }
         }
 
         function askUnlock() {
             const pass = prompt("กรุณากรอกรหัสธุรกรรม เพื่อเปิดดูข้อมูลนี้:");
             if(pass === "123123123") {
-                document.getElementById('blurSec').classList.remove('blur-zone');
-                document.getElementById('unlockBtn').classList.add('hidden');
-            } else if(pass !== null) { alert("รหัสธุรกรรมไม่ถูกต้อง!"); }
+                const blurSec = document.getElementById('blurSec');
+                const unlockBtn = document.getElementById('unlockBtn');
+                if(blurSec) blurSec.classList.remove('blur-zone');
+                if(unlockBtn) unlockBtn.classList.add('hidden');
+            } else if(pass !== null) {
+                alert("รหัสธุรกรรมไม่ถูกต้อง!");
+            }
         }
 
         function switchTab(id) { 
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id)?.classList.add('active'); 
+            const targetTab = document.getElementById(id);
+            if(targetTab) targetTab.classList.add('active'); 
             if(id === 'admin-page') loadData(); 
         }
 
-        function showPop(id) { document.getElementById(id)?.classList.replace('hidden', 'flex'); }
-        function hideAll() { document.querySelectorAll('.fixed').forEach(el => el.classList.replace('flex', 'hidden')); }
+        function showPop(id) { 
+            const el = document.getElementById(id);
+            if(el) el.classList.replace('hidden', 'flex'); 
+        }
+
+        function hideAll() { 
+            document.querySelectorAll('.fixed').forEach(el => el.classList.replace('flex', 'hidden')); 
+        }
         
         loadData();
     </script>
