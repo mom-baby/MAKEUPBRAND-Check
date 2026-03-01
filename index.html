@@ -392,6 +392,10 @@
                 hideAll();
                 switchTab('admin-page');
                 document.getElementById('adminPassInput').value = '';
+
+                // บันทึกสถานะการเข้าสู่ระบบพร้อมกับวันที่ปัจจุบัน
+                const today = new Date().toDateString();
+                localStorage.setItem('adminLoggedDate', today);
             } else { 
                 alert("System password incorrect!"); 
             }
@@ -425,7 +429,22 @@
             document.querySelectorAll('.fixed').forEach(el => el.classList.replace('flex', 'hidden')); 
         }
         
+        // ฟังก์ชันตรวจสอบสถานะการเข้าสู่ระบบตอนเปิดหน้าเว็บ
+        function checkLoginState() {
+            const today = new Date().toDateString();
+            const loggedDate = localStorage.getItem('adminLoggedDate');
+            
+            // ถ้าวันที่เข้าสู่ระบบตรงกับวันนี้ ให้ข้ามไปหน้า admin-page เลย
+            if (loggedDate === today) {
+                switchTab('admin-page');
+            } else {
+                // ถ้าไม่ตรง (ข้ามวันไปแล้ว) ให้เคลียร์ค่าทิ้ง
+                localStorage.removeItem('adminLoggedDate');
+            }
+        }
+        
         loadData();
+        checkLoginState(); // รันฟังก์ชันตรวจสอบสถานะเมื่อโหลดหน้าเว็บ
     </script>
 </body>
 </html>
